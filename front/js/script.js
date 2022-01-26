@@ -1,7 +1,7 @@
-/* J'initialise la variable articles qui contiendra mon api */
+/* Création de la variable qui contiendra l'api */
 let articles = [];
 
-/* Je crée une fonction qui récupére tout les articles depuis mon API */
+/* Fonction qui récupére tout les articles depuis l'api */
 async function fetchApi() {
   await fetch("http://localhost:3000/api/products")
     .then((res) => res.json())
@@ -9,7 +9,7 @@ async function fetchApi() {
     .catch(err => console.log('oh no', err))
 }
 
-/* Je crée une fonction avec une boucle pour afficher mes vignettes */
+/* Fonction pour insérer les produits sur la page d'acceuil*/
 async function canapDisplay() {
   await fetchApi();
   let items = document.getElementById("items");
