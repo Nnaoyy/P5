@@ -6,7 +6,15 @@ console.log(id);
 
 /* Création de la variable qui contiendra l'api */
 let articles = [];
-
+let product = {
+    name: "",
+    price: "",
+    id: "",
+    color: "",
+    quantity: "0",
+    srcImg: "",
+    altTxt: "",
+};
 /* Fonction qui récupére tout les articles depuis l'api */
 async function fetchApi() {
   await fetch("http://localhost:3000/api/products")
@@ -45,14 +53,38 @@ async function canapProduct(){
         let option = document.createElement("option");
         colors.appendChild(option);
         option.textContent = (colorsList[number])[i];
-        option.value = (colorsList[number])[i];
-
-
-
-
-    
+        option.value = (colorsList[number])[i];   
+        
     }
+
+    product.name = articles[number].name;
+    product.price= articles[number].price;
+    product.id = articles[number]._id;
+    product.srcImg = articles[number].imageUrl;
+    product.altTxt = articles[number].altTxt;
 
 
 }
+
 canapProduct()
+
+document.getElementById("colors").addEventListener("change", function(e) {
+    product.color = e.target.value;
+    })
+document.getElementById("quantity").addEventListener("input", function(e) {
+    product.quantity = e.target.value;     
+    })
+
+
+document.getElementById("addToCart").addEventListener('click', function(){
+     
+    
+    const canap = [];
+    canap.push(product);
+    localStorage.setItem("panier", JSON.stringify(canap));
+    alert ("Votre produit à bien été ajouté au panier")
+    
+        
+})
+
+
