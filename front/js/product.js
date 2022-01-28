@@ -67,24 +67,64 @@ async function canapProduct(){
 }
 
 canapProduct()
-
+/*on récupère la couleur choisie */
 document.getElementById("colors").addEventListener("change", function(e) {
     product.color = e.target.value;
-    })
+})
+/*on récupère la quantité choisie */
 document.getElementById("quantity").addEventListener("input", function(e) {
     product.quantity = e.target.value;     
-    })
+})
 
+/*losqu'on clic on envoie les données du canapé dans le localstorage */
+document.getElementById("addToCart").addEventListener('click', () => {
+     /*On verifie d'abord si les information de couleur et de quantité sont bien rempli */
+    function verify(){
+        if (product.color == ""){
+            alert("veuillez choisir une couleur!")
+        }
+        else if (product.quantity == 0 || product.quantity == ""){
+            alert("veuiller choisir une quantitée!")
+        }
+        else{
+            cart();
+        }
+    }
+/*Fonction qui va mettre le produit dans le panier */
+    function cart(){
+        /*On récupère le panier */
+        let listProduct = JSON.parse(localStorage.getItem("panier"));
 
-document.getElementById("addToCart").addEventListener('click', function(){
-     
+        /*Si il y a deja quelquechose dans le panier */
+        if (listProduct){
+            /*On cherche si le produit et déja présent dans le panier même id et même couleur */
+            let productAlreadyIn = listProduct.find((element) => 
+            element.id == product.id && element.color == product.color
+            );
+            /*Si il est deja présent on augmente la quantité et on envoie le panier en localstorage */
+            if (productAlreadyIn){
+                productAlreadyIn.quantity += product.quantity;
+                localStorage.setItem("panier", JSON.stringify(listProduct));
+                alert("la quantité du produit a été mise à jour")
+                return;
+            }
+            /*si il n'est pas déja présent on le rajoute dans le panier */
+            listProduct.push(product);
+            localStorage.setItem("panier", JSON.stringify(listProduct));
+            alert("Votre produit à bien été ajouté au panier")
+        }
+        /*Si le panier est vide */
+        else {
+            const canap = [];
+            canap.push(product);
+            localStorage.setItem("panier", JSON.stringify(canap));
+            alert ("Votre produit à bien été ajouté au panier")
     
-    const canap = [];
-    canap.push(product);
-    localStorage.setItem("panier", JSON.stringify(canap));
-    alert ("Votre produit à bien été ajouté au panier")
+        }
+
+    }
     
-        
+    verify();   
 })
 
 
