@@ -293,7 +293,7 @@ if (location.href.search("confirmation") < 1 ){
           /*et on envoie la page de confirmation*/
           .then(function (data) {
             let orderId = data.orderId;
-           /* window.location.href= `./confirmation.html?id=${orderId}` ;*/ 
+            window.location.href= `./confirmation.html?id=${orderId}` ;
         console.log(orderId);
           });
         
