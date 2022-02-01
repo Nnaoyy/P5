@@ -11,7 +11,7 @@ let product = {
     price: "",
     id: "",
     color: "",
-    quantity: "0",
+    quantity: 0,
     srcImg: "",
     altTxt: "",
 };
@@ -103,7 +103,7 @@ document.getElementById("addToCart").addEventListener('click', () => {
             );
             /*Si il est deja présent on augmente la quantité et on envoie le panier en localstorage */
             if (productAlreadyIn){
-                productAlreadyIn.quantity += product.quantity;
+                productAlreadyIn.quantity += product.quantity * 1;
                 localStorage.setItem("panier", JSON.stringify(listProduct));
                 alert("la quantité du produit a été mise à jour")
                 return;
