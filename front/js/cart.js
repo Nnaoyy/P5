@@ -2,19 +2,21 @@ let localPanier = JSON.parse(localStorage.getItem("panier"));
 console.log(localPanier)
 let qty = 0;
 let total = 0;
-/*soit on est sur la page panier*/
+/*si on est sur la page panier*/
 if (location.href.search("confirmation") < 1 ){
-
+  /*Soit le panier est vide, on affiche un message pour dire qu'il n'y a pas de produit dans le panier*/
   if (localPanier == null){
     document.getElementById("totalQuantity").innerHTML = 0;
     document.getElementById("totalPrice").innerHTML = 0 ;
     document.getElementById("cart__items")
       .innerHTML = `<h3 style="text-align: center; margin-bottom: 50px;">Vous n'avez aucun article dans votre panier !</h3>`;
+    /*Si on essaye de passer une commande avec le panier vide on met un message d'erreur */
     document.getElementById("order").addEventListener("click",function(e){
       e.preventDefault()
       alert("ajouter d'abord un produit à votre panier!")
     })
   }
+  /*sinon on affiche le panier et on permet le passage de commande */
   else{
 /*fonction qui va créer les élément pour afficher le panier*/
     async function createElements() {
@@ -23,26 +25,21 @@ if (location.href.search("confirmation") < 1 ){
 
         qty += article.quantity*1;
         total += article.quantity * article.price;
+
         /* Création de toutes les balises qui seront utilisés*/
         let cart__item = document.createElement("article");
         let cart__item__img = document.createElement("div");
         let img = document.createElement("img");
         let cart__item__content = document.createElement("div");
         let cart__item__content__description = document.createElement("div");
-        let cart__item__content__description__name =
-          document.createElement("h2");
-        let cart__item__content__description__color =
-          document.createElement("p");
-        let cart__item__content__description__price =
-          document.createElement("p");
+        let cart__item__content__description__name =document.createElement("h2");
+        let cart__item__content__description__color =document.createElement("p");
+        let cart__item__content__description__price =document.createElement("p");
         let cart__item__content__settings = document.createElement("div");
-        let cart__item__content__settings__quantity =
-          document.createElement("div");
-        let cart__item__content__settings__quantity_qty =
-          document.createElement("p");
-       let itemQuantity = document.createElement("input");
-       let cart__item__content__settings__delete =
-          document.createElement("div");
+        let cart__item__content__settings__quantity =document.createElement("div");
+        let cart__item__content__settings__quantity_qty =document.createElement("p");
+        let itemQuantity = document.createElement("input");
+        let cart__item__content__settings__delete =document.createElement("div");
         let deleteItem = document.createElement("p");
 
         /* Ajout de toutes les balises au document*/
@@ -54,30 +51,24 @@ if (location.href.search("confirmation") < 1 ){
         cart__item__content__description.append(
           cart__item__content__description__name,
           cart__item__content__description__color,
-          cart__item__content__description__price
-        );
+          cart__item__content__description__price);
         cart__item__content.appendChild(cart__item__content__settings);
         cart__item__content__settings.appendChild(
-          cart__item__content__settings__quantity
-        );
+          cart__item__content__settings__quantity);
         cart__item__content__settings__quantity.appendChild(
-          cart__item__content__settings__quantity_qty
-        );
+          cart__item__content__settings__quantity_qty);
         cart__item__content__settings__quantity.appendChild(itemQuantity);
         cart__item__content__settings.appendChild(
-          cart__item__content__settings__delete
-        );
+          cart__item__content__settings__delete);
         cart__item__content__settings__delete.appendChild(deleteItem);
 
         /* Ajout des classes et attributs*/
         cart__item.classList.add("cart__item");
         cart__item.setAttribute("data-id", article.id);
         cart__item.setAttribute("data-color", article.color);
-
         cart__item__img.classList.add("cart__item__img");
         img.src = article.srcImg;
         img.alt = article.altTxt;
-
         cart__item__content.classList.add("cart__item__content");
         cart__item__content__description.classList.add("cart__item__content__description");
         cart__item__content__description__name.textContent = article.name;
@@ -92,9 +83,7 @@ if (location.href.search("confirmation") < 1 ){
         itemQuantity.setAttribute("min", "1");
         itemQuantity.setAttribute("max", "100");
         itemQuantity.setAttribute("value", article.quantity);
-        cart__item__content__settings__delete.classList.add(
-          "cart__item__content__settings__delete"
-        );
+        cart__item__content__settings__delete.classList.add("cart__item__content__settings__delete");
         deleteItem.classList.add("deleteItem");
         deleteItem.textContent = "Supprimer";
       }
@@ -119,7 +108,7 @@ if (location.href.search("confirmation") < 1 ){
         let colorId = localPanier[i].color;
         let dataId = localPanier[i].id;
         suppr.addEventListener("click", () => {
-          /* On supprime de notre panier l'élément de la boucle selectionné via splice()*/
+          /* On supprime de notre panier l'élément selectionné */
           let filtre = localPanier.filter(function (article) {
             return article.id != dataId || article.color != colorId;
           });
@@ -163,7 +152,7 @@ if (location.href.search("confirmation") < 1 ){
       }
     }
 
-
+    /*on initialise l'objet "contact" et le tableau "products" qu'on va devoir envoyer à l'api */
     products =[];
     contact ={
       firstName : "",
@@ -173,7 +162,7 @@ if (location.href.search("confirmation") < 1 ){
       email : "",
     };
 
-
+    /*On remplie l'objet "contact" */
     document.querySelector("div.cart__order__form__question input[name='firstName']")
      .addEventListener("input", function(e) {
        contact.firstName = e.target.value;
@@ -273,7 +262,7 @@ if (location.href.search("confirmation") < 1 ){
         return true;
      }
     }
-  
+    /*On passe la commande */
     document.getElementById("order").addEventListener("click", (e) =>{ 
       e.preventDefault()
       /* Fonction fetch qui envoie à l'API un objet contenant l'objet 'contact' et le tableau 'products'*/
@@ -325,7 +314,7 @@ if (location.href.search("confirmation") < 1 ){
     })
   }
 }
-/*soit sur la page confirmation */
+/*si on est sur la page confirmation on affiche le numéro de commande */
 else {
   orderId = window.location.search.replace("?", "");
   document.getElementById("orderId").innerHTML = orderId;
